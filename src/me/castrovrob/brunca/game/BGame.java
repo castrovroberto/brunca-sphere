@@ -22,6 +22,8 @@ public class BGame {
         System.out.println("You are trapped inside a Maze...");
         System.out.println("There's no much to do except to explore.");
         this.myBoard = new Board(rows, columns);
+        this.myBoard.createGameBoard();
+        this.myBoard.setPlayer(0, 1);
         this.isGameRunning = true;
         this.gameLoop();
     }
@@ -38,15 +40,22 @@ public class BGame {
             switch(userInput) {
                 case "up":
                     System.out.println("Moving up!");
+                    this.myBoard.movePlayer("up");
                     break;
                 case "down":
                     System.out.println("Moving down!");
+                    this.myBoard.movePlayer("down");
                     break;
                 case "right":
                     System.out.println("Moving right!");
+                    this.myBoard.movePlayer("right");
                     break;
                 case "left":
                     System.out.println("Moving left!");
+                    this.myBoard.movePlayer("left");
+                    break;
+                case "info":
+                    System.out.println(this.myBoard.toString());
                     break;
                 case "quit":
                     this.isGameRunning = false;

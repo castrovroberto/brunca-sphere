@@ -4,13 +4,23 @@ public class Board {
 
     private int rows;
     private int columns;
+    private Player player;
 
     private Cell[][] gameBoard;
 
     public Board(int mRows, int mColumns) {
         this.rows = mRows;
         this.columns = mColumns;
+        
+    }
+
+    public void createGameBoard() {
         this.gameBoard = new Cell[this.rows][this.columns];
+        for(int i = 0; i < this.rows; i++) {
+            for(int j = 0; j < this.columns; j++) {
+                this.gameBoard[i][j] = new Cell();
+            }
+        }
     }
 
     public int getRows() {
@@ -21,6 +31,14 @@ public class Board {
         return columns;
     }
 
+    public void setPlayer(int row, int column) {
+        this.player = new Player(row, column, this);
+        this.gameBoard[row][column].setIsPlayerIn(true);
+    }
+
+    public void movePlayer(String direction) {
+        this.player.move(direction);
+    }
 
     private String printLines() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -53,7 +71,7 @@ public class Board {
         for(int i = 0; i < this.rows; i++) {
             stringBuilder.append("\n " + rowLetter);
             for(int j = 0; j < this.columns; j++) {
-                stringBuilder.append(" |    ");
+                stringBuilder.append(" | " + this.getCellContent(j, i) );
             }
             stringBuilder.append(" | " + rowLetter);
             rowLetter++;
@@ -65,11 +83,31 @@ public class Board {
         System.out.println(stringBuilder.toString());
     }
 
+    public void playerMoved(int prevRow, int prevColumn, 
+                        int currRow, int currColumn) {
+        if(this.gameBoard[prevRow][prevColumn].getIsPlayerIn()) {
+            this.gameBoard[prevRow][prevColumn].setIsPlayerIn(false);
+        }
+        
+        this.gameBoard[currRow][currColumn].setIsPlayerIn(true);
+    }
+
+    private String getCellContent(int row, int column) {
+        String content = "   ";
+        if(this.gameBoard[row][column].getIsPlayerIn()) {
+            content = " x ";
+        }
+        return content;
+    }
+
     @Override
     public String toString() {
-        return "Board{" +
-                "rows=" + rows +
-                ", columns=" + columns +
-                '}';
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("GameInfo { " +
+        "rows=" + this.rows +
+        ", columns=" + this.columns +
+        ", player=" + this.player.toString() +
+        "}");
+        return stringBuilder.toString();
     }
 }
